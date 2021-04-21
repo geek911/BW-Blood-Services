@@ -1,6 +1,8 @@
 import 'package:bw_blood_final/constants/routes.dart';
+import 'package:bw_blood_final/services/user_service.dart';
+import 'package:bw_blood_final/utils/validator.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
+
 
 class LoginPage extends StatefulWidget {
   @override
@@ -8,8 +10,16 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
   bool _isAdmin = false;
+
+  Future<bool> _login() async {
+    var result = await UserService()
+        .login(emailController.value.text, passwordController.value.text);
+    return result;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -18,55 +28,81 @@ class _LoginPageState extends State<LoginPage> {
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              TextFormField(
-                decoration: InputDecoration(
-                  labelText: 'Email',
-                  border: OutlineInputBorder(),
-                  suffixIcon: Icon(
-                    Icons.mail,
+          child: Form(
+            key: _formKey,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                TextFormField(
+                  controller: emailController,
+                  validator: validateEmail,
+                  decoration: InputDecoration(
+                    labelText: 'Email',
+                    border: OutlineInputBorder(),
+                    suffixIcon: Icon(
+                      Icons.mail,
+                    ),
                   ),
                 ),
-              ),
-              SizedBox(height: 20,),
-              TextFormField(
-                decoration: InputDecoration(
-                  labelText: 'Password',
-                  border: OutlineInputBorder(),
-                  suffixIcon: Icon(
-                    Icons.lock,
+                SizedBox(
+                  height: 20,
+                ),
+                TextFormField(
+                  controller: passwordController,
+                  validator: validatePassword,
+                  decoration: InputDecoration(
+                    labelText: 'Password',
+                    border: OutlineInputBorder(),
+                    suffixIcon: Icon(
+                      Icons.lock,
+                    ),
                   ),
                 ),
-              ),
-              SizedBox(height: 10,),
-              Row(
-                children: [
-                  Checkbox(value: _isAdmin, onChanged: (value){
-                    setState(() {
-                      _isAdmin = value;
-                    });
-                  }),
-                  Text("Login As Admin")
-                ],
-              ),
-              SizedBox(
-                height: 40,
-                width: double.infinity,
-                child: ElevatedButton(
-                  child: Text('LOGIN'),
-                  onPressed: () async {
-                    await Navigator.pushReplacementNamed(context, HOME_PAGE);
-                  },
+                SizedBox(
+                  height: 10,
                 ),
-              ),
-              Divider(),
-              TextButton(onPressed: () async{
-                await Navigator.pushNamed(context, REGISTER_PAGE);
-              }, child: Text('Register'))
-            ],
+                Row(
+                  children: [
+                    Checkbox(
+                        value: _isAdmin,
+                        onChanged: (value) {
+                          setState(() {
+                            _isAdmin = value;
+                          });
+                        }),
+                    Text("Login As Admin")
+                  ],
+                ),
+                SizedBox(
+                  height: 40,
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    child: Text('LOGIN'),
+                    onPressed: () async {
+                      if (_formKey.currentState.validate()) {
+                        var result = await _login();
+                        debugPrint(result.toString());
+                        if (result) {
+                          await Navigator.pushReplacementNamed(
+                              context, HOME_PAGE);
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              content: Text("something went wrong")));
+                        }
+                      }
+                    },
+                  ),
+                ),
+                Divider(),
+                TextButton(
+                    onPressed: () async {
+                      await Navigator.pushNamed(context, REGISTER_PAGE);
+
+                    },
+                    child: Text('Register'))
+              ],
+            ),
           ),
         ),
       ),
