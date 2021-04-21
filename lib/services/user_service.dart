@@ -4,6 +4,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class UserService {
+
+  static bool isAdmin = false;
+
   final FirebaseAuth auth = FirebaseAuth.instance;
   final CollectionReference users =
       FirebaseFirestore.instance.collection("users");
@@ -20,6 +23,19 @@ class UserService {
     var result = await users.where("id", isEqualTo: id).get();
     var user = ApplicationUser.fromDoc(result.docs.first);
     return user;
+  }
+
+  Future<bool> loginAsAdmin(String email, String password) async {
+    var result = await auth.signInWithEmailAndPassword(email: email, password: password);
+    if(result != null){
+      var user = await this.currentApplicationUser;
+      if(user.isAdminFor.isNotEmpty){
+        isAdmin = true;
+        return true;
+      }
+    }
+    await logout();
+    return false;
   }
 
   Future<bool> login(String email, String password) async {

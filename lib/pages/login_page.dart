@@ -3,7 +3,6 @@ import 'package:bw_blood_final/services/user_service.dart';
 import 'package:bw_blood_final/utils/validator.dart';
 import 'package:flutter/material.dart';
 
-
 class LoginPage extends StatefulWidget {
   @override
   _LoginPageState createState() => _LoginPageState();
@@ -18,6 +17,12 @@ class _LoginPageState extends State<LoginPage> {
   Future<bool> _login() async {
     var result = await UserService()
         .login(emailController.value.text, passwordController.value.text);
+    return result;
+  }
+
+  _loginAsAdmin() async {
+    var result = await UserService().loginAsAdmin(
+        emailController.value.text, passwordController.value.text);
     return result;
   }
 
@@ -81,15 +86,30 @@ class _LoginPageState extends State<LoginPage> {
                     child: Text('LOGIN'),
                     onPressed: () async {
                       if (_formKey.currentState.validate()) {
-                        var result = await _login();
-                        debugPrint(result.toString());
-                        if (result) {
-                          await Navigator.pushReplacementNamed(
-                              context, HOME_PAGE);
+                        if (!_isAdmin) {
+                          var result = await _login();
+                          debugPrint(result.toString());
+                          if (result) {
+                            await Navigator.pushReplacementNamed(
+                                context, HOME_PAGE);
+                          } else {
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                content: Text("something went wrong")));
+                          }
                         } else {
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                              content: Text("something went wrong")));
+                          var result = await _loginAsAdmin();
+                          debugPrint(result.toString());
+                          if (result) {
+                            await Navigator.pushReplacementNamed(
+                                context, HOME_PAGE);
+                          } else {
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                content: Text("You are not an admin")));
+                          }
                         }
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text("something went wrong")));
                       }
                     },
                   ),
@@ -98,7 +118,6 @@ class _LoginPageState extends State<LoginPage> {
                 TextButton(
                     onPressed: () async {
                       await Navigator.pushNamed(context, REGISTER_PAGE);
-
                     },
                     child: Text('Register'))
               ],

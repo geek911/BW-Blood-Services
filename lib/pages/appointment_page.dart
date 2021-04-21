@@ -4,6 +4,7 @@ import 'package:bw_blood_final/models/appointment.dart';
 import 'package:bw_blood_final/models/centre.dart';
 import 'package:bw_blood_final/services/appointment_service.dart';
 import 'package:bw_blood_final/services/centre_services.dart';
+import 'package:bw_blood_final/services/user_service.dart';
 import 'package:bw_blood_final/widgets/main_drawer.dart';
 import 'package:flutter/material.dart';
 
@@ -76,10 +77,11 @@ class _AppointmentPageState extends State<AppointmentPage> {
         title: Text('Appointment'),
         centerTitle: true,
         actions: [
+          UserService.isAdmin ?
           IconButton(icon: Icon(Icons.approval), onPressed: ()async{
             await Navigator.pushNamed(context, APPROVAL_PAGE);
 
-          })
+          }) : Text('')
         ],
       ),
       body:  Column(

@@ -4,7 +4,6 @@ import 'package:bw_blood_final/services/user_service.dart';
 import 'package:bw_blood_final/utils/validator.dart';
 import 'package:flutter/material.dart';
 
-
 class RegisterPage extends StatefulWidget {
   @override
   _RegisterPageState createState() => _RegisterPageState();
@@ -38,7 +37,8 @@ class _RegisterPageState extends State<RegisterPage> {
       ..village = villageConfirmController.value.text
       ..bloodGroup = bloodGroupConfirmController.value.text
       ..district = districtConfirmController.value.text
-      ..isAdmin = "false";
+      ..isAdmin = "false"
+      ..isAdminFor = "";
     UserService service = UserService();
     var result = await service.register(user);
     return result;
@@ -122,24 +122,23 @@ class _RegisterPageState extends State<RegisterPage> {
                 SizedBox(
                   height: 20,
                 ),
-            DropdownButton<String>(
-              value: districtConfirmController.text,
-              items: DISTRICTS.map((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(value),
-                  ),
-                );
-              }).toList(),
-              onChanged: (value) {
-                setState(() {
-                  districtConfirmController.text = value;
-                });
-              },
-            ),
-
+                DropdownButton<String>(
+                  value: districtConfirmController.text,
+                  items: DISTRICTS.map((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(value),
+                      ),
+                    );
+                  }).toList(),
+                  onChanged: (value) {
+                    setState(() {
+                      districtConfirmController.text = value;
+                    });
+                  },
+                ),
                 SizedBox(
                   height: 20,
                 ),
@@ -204,8 +203,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           Navigator.pop(context);
                         } else {
                           ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                  content: Text("something went wrong")));
+                              SnackBar(content: Text("something went wrong")));
                         }
                       } else {
                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(

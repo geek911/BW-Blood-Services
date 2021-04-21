@@ -3,6 +3,7 @@
 import 'package:bw_blood_final/constants/routes.dart';
 import 'package:bw_blood_final/models/tip.dart';
 import 'package:bw_blood_final/services/tip_service.dart';
+import 'package:bw_blood_final/services/user_service.dart';
 import 'package:bw_blood_final/widgets/main_drawer.dart';
 import 'package:flutter/material.dart';
 
@@ -79,12 +80,13 @@ class _HomePageState extends State<HomePage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('DAILY TIPS'),
+        title: Text('BLOG'),
         centerTitle: true,
         actions: [
+          UserService.isAdmin ?
           IconButton(icon: Icon(Icons.add), onPressed: ()async {
             await Navigator.pushNamed(context, ADD_DAILY_TIP_PAGE);
-          })
+          }) : Text('')
         ],
       ),
       body: loadTips(this._allTips),

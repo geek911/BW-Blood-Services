@@ -1,6 +1,7 @@
 import 'package:bw_blood_final/constants/routes.dart';
 import 'package:bw_blood_final/models/centre.dart';
 import 'package:bw_blood_final/services/centre_services.dart';
+import 'package:bw_blood_final/services/user_service.dart';
 import 'package:bw_blood_final/widgets/main_drawer.dart';
 import 'package:flutter/material.dart';
 
@@ -58,9 +59,10 @@ class _BTCPageState extends State<BTCPage> {
       appBar: AppBar(
         title: Text('BLOOD TRANSFUSION CENTRE'),
         actions: [
+          UserService.isAdmin ?
           IconButton(icon: Icon(Icons.add), onPressed: () async{
             await Navigator.pushNamed(context, ADD_BTC_PAGE);
-          })
+          }): Text('')
         ],
         centerTitle: true,
       ),
