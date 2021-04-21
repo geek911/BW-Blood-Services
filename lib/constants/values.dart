@@ -8,3 +8,16 @@ const BLOOD_GROUPS = [
   'AB RhD positive (AB+)',
   'AB RhD negative (AB-)'
 ];
+
+const DISTRICTS = [
+  'Chobe',
+  'Ngamilang',
+  'Ghanzi District',
+  'Kgalagadi District',
+  'Kweneng District',
+  'Kgatleng District',
+  'Central District',
+  'North-East District',
+  'Southern District',
+  'South-East District'
+];

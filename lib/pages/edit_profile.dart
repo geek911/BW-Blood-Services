@@ -1,10 +1,9 @@
-
+import 'package:bw_blood_final/constants/values.dart';
 import 'package:bw_blood_final/services/user_service.dart';
 import 'package:bw_blood_final/utils/validator.dart';
 import 'package:flutter/material.dart';
 
 class EditProfilePage extends StatefulWidget {
-
   @override
   _EditProfilePageState createState() => _EditProfilePageState();
 }
@@ -19,30 +18,28 @@ class _EditProfilePageState extends State<EditProfilePage> {
   final TextEditingController phoneController = TextEditingController();
 
   final TextEditingController passwordConfirmController =
-  TextEditingController();
+      TextEditingController();
 
   final TextEditingController ageConfirmController = TextEditingController();
 
   final TextEditingController villageConfirmController =
-  TextEditingController();
+      TextEditingController();
 
   final TextEditingController bloodGroupConfirmController =
-  TextEditingController();
+      TextEditingController();
 
   final TextEditingController districtConfirmController =
-  TextEditingController();
+      TextEditingController();
 
   final _formKey = GlobalKey<FormState>();
 
-
-
-  Future<bool> _update(){
+  Future<bool> _update() {
     return Future.value(false);
   }
 
   @override
   void initState() {
-    UserService().currentApplicationUser.then((user){
+    UserService().currentApplicationUser.then((user) {
       setState(() {
         nameController.text = user.name;
         ageConfirmController.text = user.age;
@@ -50,7 +47,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
         phoneController.text = user.phone;
         villageConfirmController.text = user.village;
         districtConfirmController.text = user.district;
-        
+        bloodGroupConfirmController.text = user.bloodGroup;
       });
     });
     super.initState();
@@ -129,24 +126,43 @@ class _EditProfilePageState extends State<EditProfilePage> {
                     SizedBox(
                       height: 20,
                     ),
-                    TextFormField(
-                      validator: validate,
-                      controller: districtConfirmController,
-                      decoration: InputDecoration(
-                        labelText: 'DISTRICT',
-                        border: OutlineInputBorder(),
-                      ),
+                    DropdownButton<String>(
+                      value: districtConfirmController.text,
+                      items: DISTRICTS.map((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(value),
+                          ),
+                        );
+                      }).toList(),
+                      onChanged: (value) {
+                        setState(() {
+                          districtConfirmController.text = value;
+                        });
+                      },
                     ),
+
                     SizedBox(
                       height: 20,
                     ),
-                    TextFormField(
-                      validator: validateBloodGroup,
-                      controller: bloodGroupConfirmController,
-                      decoration: InputDecoration(
-                        labelText: 'BLOOD GROUP',
-                        border: OutlineInputBorder(),
-                      ),
+                    DropdownButton<String>(
+                      value: bloodGroupConfirmController.text,
+                      items: BLOOD_GROUPS.map((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(value),
+                          ),
+                        );
+                      }).toList(),
+                      onChanged: (value) {
+                        setState(() {
+                          bloodGroupConfirmController.text = value;
+                        });
+                      },
                     ),
                     SizedBox(
                       height: 20,
@@ -214,4 +230,3 @@ class _EditProfilePageState extends State<EditProfilePage> {
     );
   }
 }
-

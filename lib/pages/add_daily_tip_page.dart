@@ -60,7 +60,7 @@ class AddDailyTipPage extends StatelessWidget {
                 height: 40,
                 width: double.infinity,
                 child: ElevatedButton(
-                  child: Text('ADD TIP'),
+                  child: Text('POST'),
                   onPressed: () async {
                     if (_formKey.currentState.validate()) {
                       await _addTip();

@@ -1,3 +1,4 @@
+import 'package:bw_blood_final/constants/values.dart';
 import 'package:bw_blood_final/models/application_user.dart';
 import 'package:bw_blood_final/services/user_service.dart';
 import 'package:bw_blood_final/utils/validator.dart';
@@ -41,6 +42,13 @@ class _RegisterPageState extends State<RegisterPage> {
     UserService service = UserService();
     var result = await service.register(user);
     return result;
+  }
+
+  @override
+  void initState() {
+    bloodGroupConfirmController.text = BLOOD_GROUPS[0];
+    districtConfirmController.text = DISTRICTS[0];
+    super.initState();
   }
 
   @override
@@ -114,24 +122,43 @@ class _RegisterPageState extends State<RegisterPage> {
                 SizedBox(
                   height: 20,
                 ),
-                TextFormField(
-                  validator: validate,
-                  controller: districtConfirmController,
-                  decoration: InputDecoration(
-                    labelText: 'DISTRICT',
-                    border: OutlineInputBorder(),
+            DropdownButton<String>(
+              value: districtConfirmController.text,
+              items: DISTRICTS.map((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(value),
                   ),
-                ),
+                );
+              }).toList(),
+              onChanged: (value) {
+                setState(() {
+                  districtConfirmController.text = value;
+                });
+              },
+            ),
+
                 SizedBox(
                   height: 20,
                 ),
-                TextFormField(
-                  validator: validateBloodGroup,
-                  controller: bloodGroupConfirmController,
-                  decoration: InputDecoration(
-                    labelText: 'BLOOD GROUP',
-                    border: OutlineInputBorder(),
-                  ),
+                DropdownButton<String>(
+                  value: bloodGroupConfirmController.text,
+                  items: BLOOD_GROUPS.map((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(value),
+                      ),
+                    );
+                  }).toList(),
+                  onChanged: (value) {
+                    setState(() {
+                      bloodGroupConfirmController.text = value;
+                    });
+                  },
                 ),
                 SizedBox(
                   height: 20,
