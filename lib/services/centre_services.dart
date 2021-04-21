@@ -24,6 +24,11 @@ class CenterServices {
     await centres.add(centre.toMap());
   }
 
+  Future<Centre> getCentre(String id) async {
+    var result = await centres.doc(id).get();
+    return Centre.fromDoc(result);
+  }
+
 
 
 

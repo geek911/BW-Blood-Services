@@ -26,10 +26,12 @@ class _EditProfilePageState extends State<EditProfilePage> {
       TextEditingController();
 
   final TextEditingController bloodGroupConfirmController =
-      TextEditingController();
+      TextEditingController()
+  ..text = BLOOD_GROUPS[0];
 
   final TextEditingController districtConfirmController =
-      TextEditingController();
+      TextEditingController()
+  ..text = DISTRICTS[0];
 
   final _formKey = GlobalKey<FormState>();
 
@@ -127,7 +129,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                       height: 20,
                     ),
                     DropdownButton<String>(
-                      value: districtConfirmController.text,
+                      value: districtConfirmController.value.text,
                       items: DISTRICTS.map((String value) {
                         return DropdownMenuItem<String>(
                           value: value,

@@ -16,6 +16,12 @@ class UserService {
     return user;
   }
 
+  Future<ApplicationUser> getUserById(String id) async {
+    var result = await users.where("id", isEqualTo: id).get();
+    var user = ApplicationUser.fromDoc(result.docs.first);
+    return user;
+  }
+
   Future<bool> login(String email, String password) async {
     try {
       var result = await this
@@ -41,17 +47,8 @@ class UserService {
     if (result.user == null) {
       return false;
     }
-    await users.add({
-      "id": result.user.uid,
-      "name": user.name,
-      "email": user.email,
-      "phone": user.phone,
-      "age": user.age,
-      "village": user.village,
-      "bloodGroup": user.bloodGroup,
-      "district": user.district,
-      "is_admin": user.isAdmin,
-    });
+    user.id = result.user.uid;
+    await users.add(user.toMap());
     return true;
   }
 

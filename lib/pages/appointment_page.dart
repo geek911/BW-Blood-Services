@@ -1,4 +1,5 @@
 
+import 'package:bw_blood_final/constants/routes.dart';
 import 'package:bw_blood_final/models/appointment.dart';
 import 'package:bw_blood_final/models/centre.dart';
 import 'package:bw_blood_final/services/appointment_service.dart';
@@ -74,6 +75,12 @@ class _AppointmentPageState extends State<AppointmentPage> {
       appBar: AppBar(
         title: Text('Appointment'),
         centerTitle: true,
+        actions: [
+          IconButton(icon: Icon(Icons.approval), onPressed: ()async{
+            await Navigator.pushNamed(context, APPROVAL_PAGE);
+
+          })
+        ],
       ),
       body:  Column(
         children: [
@@ -114,13 +121,20 @@ class _AppointmentPageState extends State<AppointmentPage> {
               itemBuilder: (context, index) {
                 Appointment a = _appointments[index];
                 Centre centre = _centres.firstWhere((element) => element.id == a.centreId);
+                Color color = Colors.orange;
+                if(a.status == 'approved'){
+                  color = Colors.green;
+                }else if(a.status == 'rejected'){
+                  color = Colors.red;
+                }
                 return Card(
                   margin: EdgeInsets.all(10),
                   child: ListTile(
                     title: Text(
                      centre.name,
+                      style: TextStyle(color: color),
                     ),
-                    subtitle: Text('On' +a.date.toString()),
+                    subtitle: Text('On ${a.date.toString().substring(0, 10)}, status - ${a.status}', style: TextStyle(color: color),),
                     trailing: IconButton(icon: Icon(Icons.delete, color: Colors.red,), onPressed: () async {
                       await deleteAppointment(a.id);
                     },),
