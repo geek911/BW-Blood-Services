@@ -24,6 +24,7 @@ class _RegisterPageState extends State<RegisterPage> {
   final TextEditingController districtConfirmController =
       TextEditingController();
   final _formKey = GlobalKey<FormState>();
+
   bool _isAdmin = false;
 
   Future<bool> _register() async {

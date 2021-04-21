@@ -54,4 +54,21 @@ class UserService {
     });
     return true;
   }
+
+  Future<List<ApplicationUser>> getAllUsers() async {
+    List<ApplicationUser> users = [];
+    var snapshot = await this.users.get();
+    for (var doc in snapshot.docs ) {
+      if(doc['email'] == auth.currentUser.email){
+        continue;
+      }
+      var user = ApplicationUser.fromDoc(doc);
+      users.add(user);
+    }
+    return users;
+  }
+
+  Future<void> logout() async{
+    await auth.signOut();
+  }
 }

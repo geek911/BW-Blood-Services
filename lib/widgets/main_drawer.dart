@@ -1,13 +1,15 @@
 import 'package:bw_blood_final/constants/routes.dart';
+import 'package:bw_blood_final/services/user_service.dart';
 import 'package:flutter/material.dart';
 
 Widget mainDrawer(BuildContext context) {
   return Drawer(
       child: ListView(
     children: [
-      DrawerHeader(child: Center(
-        // child: Text('BW BLOOD SERVICES'),
-      )),
+      DrawerHeader(
+          child: Center(
+              // child: Text('BW BLOOD SERVICES'),
+              )),
       ListTile(
         leading: Icon(
           Icons.home,
@@ -65,6 +67,10 @@ Widget mainDrawer(BuildContext context) {
           Icons.logout,
           color: Theme.of(context).primaryColor,
         ),
+        onTap: () async {
+          await UserService().logout();
+          await Navigator.pushReplacementNamed(context, LOGIN_PAGE);
+        },
         title: Text('Logout'),
       ),
     ],

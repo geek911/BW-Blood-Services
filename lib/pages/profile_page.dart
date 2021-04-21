@@ -1,3 +1,4 @@
+import 'package:bw_blood_final/constants/routes.dart';
 import 'package:bw_blood_final/models/application_user.dart';
 import 'package:bw_blood_final/services/user_service.dart';
 import 'package:bw_blood_final/widgets/main_drawer.dart';
@@ -85,6 +86,10 @@ class _ProfilePageState extends State<ProfilePage> {
       appBar: AppBar(
         title: Text('PROFILE'),
         centerTitle: true,
+        actions: [IconButton(icon: Icon(Icons.edit), onPressed: () async {
+
+          await Navigator.pushNamed(context, EDIT_PROFILE_PAGE);
+        })],
       ),
       body: initBody(),
       drawer: mainDrawer(context),
