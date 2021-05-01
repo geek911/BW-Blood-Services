@@ -4,14 +4,13 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class UserService {
-
   static bool isAdmin = false;
 
   final FirebaseAuth auth = FirebaseAuth.instance;
   final CollectionReference users =
       FirebaseFirestore.instance.collection("users");
   final User _currentUser = FirebaseAuth.instance.currentUser;
-
+  final administrators = FirebaseFirestore.instance.collection("administrator");
   Future<ApplicationUser> get currentApplicationUser async {
     var result = await users.where("id", isEqualTo: _currentUser.uid).get();
 
@@ -26,10 +25,11 @@ class UserService {
   }
 
   Future<bool> loginAsAdmin(String email, String password) async {
-    var result = await auth.signInWithEmailAndPassword(email: email, password: password);
-    if(result != null){
+    var result =
+        await auth.signInWithEmailAndPassword(email: email, password: password);
+    if (result != null) {
       var user = await this.currentApplicationUser;
-      if(user.isAdminFor.isNotEmpty){
+      if (user.isAdminFor.isNotEmpty) {
         isAdmin = true;
         return true;
       }
@@ -71,8 +71,8 @@ class UserService {
   Future<List<ApplicationUser>> getAllUsers() async {
     List<ApplicationUser> users = [];
     var snapshot = await this.users.get();
-    for (var doc in snapshot.docs ) {
-      if(doc['email'] == auth.currentUser.email){
+    for (var doc in snapshot.docs) {
+      if (doc['email'] == auth.currentUser.email) {
         continue;
       }
       var user = ApplicationUser.fromDoc(doc);
@@ -81,7 +81,18 @@ class UserService {
     return users;
   }
 
-  Future<void> logout() async{
+  Future<void> logout() async {
     await auth.signOut();
+  }
+
+  Future<void> updateToAdmin(String email, String centreId) async {
+    var result = await users.where('email', isEqualTo: email).get();
+    await users.doc(result.docs.first.id).update({'is_admin': 'true', 'is_admin_for': centreId});
+    ApplicationUser user = ApplicationUser.fromDoc(result.docs.first);
+    await administrators.add({
+      'user_id': user.id,
+      'centre_id': centreId
+    });
+    // debugPrint(centreId);
   }
 }

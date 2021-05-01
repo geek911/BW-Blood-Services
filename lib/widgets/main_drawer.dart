@@ -64,6 +64,16 @@ Widget mainDrawer(BuildContext context) {
                   // Navigator.pop(context);
                 }),
             ListTile(
+                leading: Icon(
+                  Icons.person,
+                  color: Theme.of(context).primaryColor,
+                ),
+                title: Text('Add Admin'),
+                onTap: () async {
+                  await Navigator.pushReplacementNamed(context, ADD_ADMIN_PAGE);
+                  // Navigator.pop(context);
+                }),
+            ListTile(
               leading: Icon(
                 Icons.logout,
                 color: Theme.of(context).primaryColor,

@@ -1,4 +1,5 @@
 import 'package:bw_blood_final/constants/routes.dart';
+import 'package:bw_blood_final/pages/add_admin_page.dart';
 import 'package:bw_blood_final/pages/add_btc_page.dart';
 import 'package:bw_blood_final/pages/add_daily_tip_page.dart';
 import 'package:bw_blood_final/pages/appointment_page.dart';
@@ -31,7 +32,8 @@ class App extends StatelessWidget {
         EDIT_PROFILE_PAGE: (context)=>EditProfilePage(),
         ADD_BTC_PAGE: (context)=>AddBTCPage(),
         ADD_DAILY_TIP_PAGE: (context)=>AddDailyTipPage(),
-        APPROVAL_PAGE: (context)=> ApprovalPage()
+        APPROVAL_PAGE: (context)=> ApprovalPage(),
+        ADD_ADMIN_PAGE: (context)=>AddAdminPage()
       },
 
     );

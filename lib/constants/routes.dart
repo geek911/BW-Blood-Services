@@ -11,3 +11,4 @@ const EDIT_PROFILE_PAGE = '/edit_profile';
 const ADD_BTC_PAGE = '/add_btc';
 const  ADD_DAILY_TIP_PAGE = '/add_tip';
 const APPROVAL_PAGE = '/approve_appointments';
+const ADD_ADMIN_PAGE = '/add_admin';
