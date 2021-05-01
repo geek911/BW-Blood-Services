@@ -1,6 +1,7 @@
 import 'package:bw_blood_final/constants/routes.dart';
 import 'package:bw_blood_final/services/user_service.dart';
 import 'package:bw_blood_final/utils/validator.dart';
+import 'package:bw_blood_final/widgets/progressBar.dart';
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatefulWidget {
@@ -15,8 +16,8 @@ class _LoginPageState extends State<LoginPage> {
   bool _isAdmin = false;
 
   Future<bool> _login() async {
-    var result = await UserService()
-        .login(emailController.value.text.trim(), passwordController.value.text);
+    var result = await UserService().login(
+        emailController.value.text.trim(), passwordController.value.text);
     return result;
   }
 
@@ -40,7 +41,6 @@ class _LoginPageState extends State<LoginPage> {
             key: _formKey,
             child: Center(
               child: SingleChildScrollView(
-
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -92,16 +92,20 @@ class _LoginPageState extends State<LoginPage> {
                       child: ElevatedButton(
                         child: Text('LOGIN'),
                         onPressed: () async {
+                          var p = progressIndicator(context, 'Please wait...');
+                          p.show();
                           if (_formKey.currentState.validate()) {
+
                             if (!_isAdmin) {
                               var result = await _login();
-                              debugPrint(result.toString());
+                              // debugPrint(result.toString());
                               if (result) {
                                 await Navigator.pushReplacementNamed(
                                     context, HOME_PAGE);
                               } else {
-                                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                                    content: Text("something went wrong")));
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                        content: Text("something went wrong")));
                               }
                             } else {
                               var result = await _loginAsAdmin();
@@ -110,14 +114,16 @@ class _LoginPageState extends State<LoginPage> {
                                 await Navigator.pushReplacementNamed(
                                     context, HOME_PAGE);
                               } else {
-                                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                                    content: Text("You are not an admin")));
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                        content: Text("You are not an admin")));
                               }
                             }
                           } else {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(content: Text("something went wrong")));
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                content: Text("something went wrong")));
                           }
+                          p.hide();
                         },
                       ),
                     ),
