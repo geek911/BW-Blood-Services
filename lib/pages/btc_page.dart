@@ -2,6 +2,7 @@ import 'package:bw_blood_final/constants/routes.dart';
 import 'package:bw_blood_final/models/centre.dart';
 import 'package:bw_blood_final/services/centre_services.dart';
 import 'package:bw_blood_final/services/user_service.dart';
+import 'package:bw_blood_final/utils/contact_services.dart';
 import 'package:bw_blood_final/widgets/main_drawer.dart';
 import 'package:flutter/material.dart';
 
@@ -42,7 +43,11 @@ class _BTCPageState extends State<BTCPage> {
                 children: [
                   Text(c.name, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),),
                   SizedBox(height: 10,),
-                  Text(c.phoneNumber, style: TextStyle(fontSize: 20),),
+                  TextButton(
+                    onPressed: (){
+                      ContactServices().call(c.phoneNumber);
+                    },
+                      child: Text(c.phoneNumber, style: TextStyle(fontSize: 20),)),
                   SizedBox(height: 10,),
                   Text(c.location, style: TextStyle(fontSize: 20),),
                 ],

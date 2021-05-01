@@ -11,6 +11,7 @@ class UserService {
       FirebaseFirestore.instance.collection("users");
   final User _currentUser = FirebaseAuth.instance.currentUser;
   final administrators = FirebaseFirestore.instance.collection("administrator");
+
   Future<ApplicationUser> get currentApplicationUser async {
     var result = await users.where("id", isEqualTo: _currentUser.uid).get();
 
@@ -43,14 +44,14 @@ class UserService {
       var result = await this
           .auth
           .signInWithEmailAndPassword(email: email, password: password);
-      debugPrint("user id : " + result.user.uid);
+      // debugPrint("user id : " + result.user.uid);
       if (result.user == null) {
         return false;
       } else {
         return true;
       }
     } catch (e) {
-      print(e);
+      // print(e);
       return false;
     }
   }
@@ -87,12 +88,11 @@ class UserService {
 
   Future<void> updateToAdmin(String email, String centreId) async {
     var result = await users.where('email', isEqualTo: email).get();
-    await users.doc(result.docs.first.id).update({'is_admin': 'true', 'is_admin_for': centreId});
+    await users
+        .doc(result.docs.first.id)
+        .update({'is_admin': 'true', 'is_admin_for': centreId});
     ApplicationUser user = ApplicationUser.fromDoc(result.docs.first);
-    await administrators.add({
-      'user_id': user.id,
-      'centre_id': centreId
-    });
+    await administrators.add({'user_id': user.id, 'centre_id': centreId});
     // debugPrint(centreId);
   }
 }

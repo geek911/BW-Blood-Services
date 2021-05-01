@@ -11,6 +11,10 @@ class TipService {
     await tipsCollection.add(tip.toMap());
   }
 
+  Future<void> deleteTip(String tipId) async {
+    await tipsCollection.doc(tipId).delete();
+  }
+
   Future<List<Tip>> getTips() async {
     List<Tip> tips = [];
     QuerySnapshot snapshot = await this.tipsCollection.get();

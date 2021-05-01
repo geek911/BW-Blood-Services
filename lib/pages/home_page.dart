@@ -15,10 +15,10 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
 
   List<Tip> _allTips;
-
+  TipService service = TipService();
   @override
   void initState() {
-    TipService().getTips().then((tips) {
+    service.getTips().then((tips) {
       setState(() {
         _allTips = tips;
       });
@@ -43,10 +43,23 @@ class _HomePageState extends State<HomePage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    tip.title,
-                    textAlign: TextAlign.start,
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        tip.title,
+                        textAlign: TextAlign.start,
+                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
+                      ),
+                      IconButton(icon: Icon(Icons.delete, color: Colors.red,), onPressed: () async {
+                        await service.deleteTip(tip.id);
+                        service.getTips().then((tips) {
+                          setState(() {
+                            _allTips = tips;
+                          });
+                        });
+                      })
+                    ],
                   ),
                   Divider(
                     height: 20,
@@ -62,7 +75,7 @@ class _HomePageState extends State<HomePage> {
 
                           Divider(),
 
-                          Text('Published: ' + tip.date)
+                          Text('Published On: ' + tip.date.substring(0, 10))
                         ],
                       )),
                 ],

@@ -65,7 +65,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
       body: SafeArea(
         child: Scaffold(
           body: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
             child: SingleChildScrollView(
               child: Form(
                 key: _formKey,
@@ -169,30 +169,30 @@ class _EditProfilePageState extends State<EditProfilePage> {
                     SizedBox(
                       height: 20,
                     ),
-                    TextFormField(
-                      validator: validate,
-                      controller: passwordController,
-                      obscureText: true,
-                      decoration: InputDecoration(
-                        labelText: 'PASSWORD',
-                        border: OutlineInputBorder(),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    TextFormField(
-                      validator: validate,
-                      controller: passwordConfirmController,
-                      obscureText: true,
-                      decoration: InputDecoration(
-                        labelText: 'CONFIRM PASSWORD',
-                        border: OutlineInputBorder(),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
+                    // TextFormField(
+                    //   validator: validate,
+                    //   controller: passwordController,
+                    //   obscureText: true,
+                    //   decoration: InputDecoration(
+                    //     labelText: 'PASSWORD',
+                    //     border: OutlineInputBorder(),
+                    //   ),
+                    // ),
+                    // SizedBox(
+                    //   height: 20,
+                    // ),
+                    // TextFormField(
+                    //   validator: validate,
+                    //   controller: passwordConfirmController,
+                    //   obscureText: true,
+                    //   decoration: InputDecoration(
+                    //     labelText: 'CONFIRM PASSWORD',
+                    //     border: OutlineInputBorder(),
+                    //   ),
+                    // ),
+                    // SizedBox(
+                    //   height: 20,
+                    // ),
                     SizedBox(
                       height: 40,
                       width: double.infinity,
@@ -221,7 +221,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
                       ),
                     ),
                     Divider(),
-                    TextButton(onPressed: () {}, child: Text('CANCEL'))
+                    TextButton(onPressed: () {
+                      Navigator.pop(context);
+                    }, child: Text('CANCEL'))
                   ],
                 ),
               ),

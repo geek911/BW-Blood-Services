@@ -23,7 +23,7 @@ class _LoginPageState extends State<LoginPage> {
 
   _loginAsAdmin() async {
     var result = await UserService().loginAsAdmin(
-        emailController.value.text, passwordController.value.text);
+        emailController.value.text.trim(), passwordController.value.text);
     return result;
   }
 
@@ -92,38 +92,47 @@ class _LoginPageState extends State<LoginPage> {
                       child: ElevatedButton(
                         child: Text('LOGIN'),
                         onPressed: () async {
-                          var p = progressIndicator(context, 'Please wait...');
-                          p.show();
-                          if (_formKey.currentState.validate()) {
 
-                            if (!_isAdmin) {
-                              var result = await _login();
-                              // debugPrint(result.toString());
-                              if (result) {
-                                await Navigator.pushReplacementNamed(
-                                    context, HOME_PAGE);
+                          if (_formKey.currentState.validate()) {
+                            var p = progressIndicator(context, 'Please wait...');
+                            try {
+
+                              p.show();
+                              if (!_isAdmin) {
+                                var result = await _login();
+                                // debugPrint(result.toString());
+                                if (result) {
+                                  await Navigator.pushReplacementNamed(
+                                      context, HOME_PAGE);
+                                } else {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                          content: Text(
+                                              "something went wrong")));
+                                }
                               } else {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                        content: Text("something went wrong")));
+                                var result = await _loginAsAdmin();
+                                debugPrint(result.toString());
+                                if (result) {
+                                  await Navigator.pushReplacementNamed(
+                                      context, HOME_PAGE);
+                                } else {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                          content: Text(
+                                              "You are not an admin")));
+                                }
                               }
-                            } else {
-                              var result = await _loginAsAdmin();
-                              debugPrint(result.toString());
-                              if (result) {
-                                await Navigator.pushReplacementNamed(
-                                    context, HOME_PAGE);
-                              } else {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                        content: Text("You are not an admin")));
-                              }
+                            }catch(e){
+
+                            }finally{
+                              p.hide();
                             }
                           } else {
                             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                                content: Text("something went wrong")));
+                                content: Text("Invalid information")));
                           }
-                          p.hide();
+
                         },
                       ),
                     ),

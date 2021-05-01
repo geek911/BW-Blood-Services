@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Tip {
+  String id;
   String title;
   String body;
   String date;
@@ -8,6 +9,7 @@ class Tip {
   Tip();
 
   Tip.fromDoc(QueryDocumentSnapshot doc) {
+    id = doc.id;
     title = doc['title'];
     body = doc['body'];
     date = doc['date'];

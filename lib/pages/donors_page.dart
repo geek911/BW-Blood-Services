@@ -1,5 +1,7 @@
 import 'package:bw_blood_final/models/application_user.dart';
+import 'package:bw_blood_final/models/centre.dart';
 import 'package:bw_blood_final/services/user_service.dart';
+import 'package:bw_blood_final/utils/contact_services.dart';
 import 'package:bw_blood_final/utils/validator.dart';
 import 'package:bw_blood_final/widgets/main_drawer.dart';
 import 'package:flutter/material.dart';
@@ -40,44 +42,76 @@ class _DonorsPageState extends State<DonorsPage> {
       );
     }
 
+    if(filtered.isEmpty){
+      return Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(Icons.search_off, size: 180, color: Colors.red,),
+            Text('No result found', style: TextStyle(fontSize: 30, color: Colors.red),)
+          ],
+        ),
+      );
+    }
+
     return ListView.builder(
       itemCount: filtered.length,
       itemBuilder: (context, index) {
         var u = filtered[index];
         return Padding(
           padding: const EdgeInsets.all(8.0),
-          child: ListTile(
-            leading: Icon(
-              Icons.person,
-              size: 50,
-              color: Theme.of(context).primaryColor,
-            ),
-            title: Text(
-              u.name,
-              style:
-                  TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-            ),
-            subtitle: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  u.email,
-                  textAlign: TextAlign.start,
+          child: Card(
+            child: Container(
+              padding: EdgeInsets.only(top: 20),
+              child: ListTile(
+                leading: Icon(
+                  Icons.person,
+                  size: 50,
+                  color: Theme.of(context).primaryColor,
                 ),
-                Text(
-                  u.phone,
-                  textAlign: TextAlign.start,
+                title: Text(
+                  u.name,
+                  style:
+                      TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
                 ),
-                Text(
-                  u.district,
-                  textAlign: TextAlign.start,
+                subtitle: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    TextButton(
+                      onPressed: () {
+                        ContactServices().sendEmail(u.email);
+                      },
+                      child: Text(
+                        u.email,
+                        textAlign: TextAlign.start,
+                      ),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        ContactServices().call(u.phone);
+                      },
+                      child: Text(
+                        u.phone,
+                        textAlign: TextAlign.start,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        u.district,
+                        textAlign: TextAlign.start,
+                      ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
-            trailing: Text(
-              u.bloodGroup,
-              style: TextStyle(
-                  fontSize: 30, color: Colors.red, fontWeight: FontWeight.bold),
+                trailing: Text(
+                  u.bloodGroup,
+                  style: TextStyle(
+                      fontSize: 30,
+                      color: Colors.red,
+                      fontWeight: FontWeight.bold),
+                ),
+              ),
             ),
           ),
         );

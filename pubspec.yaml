@@ -35,6 +35,7 @@ dependencies:
   progress_dialog: ^1.2.4
   syncfusion_flutter_datepicker: ^19.1.58-beta
   connectivity: ^3.0.3
+  url_launcher: ^6.0.3
 
 
 dev_dependencies:
