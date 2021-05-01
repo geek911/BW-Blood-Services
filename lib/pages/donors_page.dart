@@ -1,5 +1,6 @@
 import 'package:bw_blood_final/models/application_user.dart';
 import 'package:bw_blood_final/services/user_service.dart';
+import 'package:bw_blood_final/utils/validator.dart';
 import 'package:bw_blood_final/widgets/main_drawer.dart';
 import 'package:flutter/material.dart';
 
@@ -9,13 +10,12 @@ class DonorsPage extends StatefulWidget {
 }
 
 class _DonorsPageState extends State<DonorsPage> {
-
   List<ApplicationUser> _allUsers;
-
+  final _editSearchController = TextEditingController();
 
   @override
   void initState() {
-    UserService().getAllUsers().then((value){
+    UserService().getAllUsers().then((value) {
       setState(() {
         _allUsers = value;
       });
@@ -23,37 +23,68 @@ class _DonorsPageState extends State<DonorsPage> {
     super.initState();
   }
 
-  Widget loadData(List<ApplicationUser> users){
+  Widget loadData(List<ApplicationUser> users) {
+    List<ApplicationUser> filtered = [];
+    if (users != null) {
+      filtered = users.where((user) {
+        return user.name.contains(_editSearchController.text) ||
+            user.email.contains(_editSearchController.text) ||
+            user.bloodGroup.contains(_editSearchController.text) ||
+            user.bloodGroup.contains(_editSearchController.text);
+      }).toList();
+    }
 
-    if(users == null){
+    if (users == null) {
       return Center(
         child: CircularProgressIndicator(),
       );
     }
 
     return ListView.builder(
-      itemCount: users.length,
+      itemCount: filtered.length,
       itemBuilder: (context, index) {
-        var u = users[index];
+        var u = filtered[index];
         return Padding(
-
           padding: const EdgeInsets.all(8.0),
           child: ListTile(
-            leading: Icon(Icons.person, size: 50, color: Theme.of(context).primaryColor,),
-            title: Text(u.name, style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),),
+            leading: Icon(
+              Icons.person,
+              size: 50,
+              color: Theme.of(context).primaryColor,
+            ),
+            title: Text(
+              u.name,
+              style:
+                  TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+            ),
             subtitle: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(u.email, textAlign: TextAlign.start,),
-                Text(u.phone, textAlign: TextAlign.start,),
-                Text(u.district, textAlign: TextAlign.start,),
+                Text(
+                  u.email,
+                  textAlign: TextAlign.start,
+                ),
+                Text(
+                  u.phone,
+                  textAlign: TextAlign.start,
+                ),
+                Text(
+                  u.district,
+                  textAlign: TextAlign.start,
+                ),
               ],
             ),
-            trailing: Text(u.bloodGroup, style: TextStyle(fontSize: 30, color: Colors.red, fontWeight: FontWeight.bold),),
+            trailing: Text(
+              u.bloodGroup,
+              style: TextStyle(
+                  fontSize: 30, color: Colors.red, fontWeight: FontWeight.bold),
+            ),
           ),
         );
-      },);
+      },
+    );
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -61,7 +92,37 @@ class _DonorsPageState extends State<DonorsPage> {
         title: Text('ALL DONORS'),
         centerTitle: true,
       ),
-      body: loadData(this._allUsers),
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
+            child: Column(
+              children: [
+                TextFormField(
+                  controller: _editSearchController,
+                  validator: validate,
+                  decoration: InputDecoration(
+                    labelText: 'Search',
+                    border: OutlineInputBorder(),
+                    suffixIcon: Icon(
+                      Icons.search,
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                      onPressed: () {
+                        setState(() {});
+                      },
+                      child: Text('Search')),
+                )
+              ],
+            ),
+          ),
+          Expanded(child: loadData(this._allUsers)),
+        ],
+      ),
       drawer: mainDrawer(context),
     );
   }
