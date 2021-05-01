@@ -104,10 +104,13 @@ class _AppointmentPageState extends State<AppointmentPage> {
                     });
                   },
                 ),
-                TextButton.icon(
-                    label: Text(_dateTime.toString()),
-                    onPressed: () => _selectDate(context),
-                    icon: Icon(Icons.calendar_today)),
+
+
+                // TextButton.icon(
+                //     label: Text(_dateTime.toString()),
+                //     onPressed: () => _selectDate(context),
+                //     icon: Icon(Icons.calendar_today)),
+
                 ElevatedButton.icon(
                     icon: Icon(Icons.add),
                     onPressed: () async {

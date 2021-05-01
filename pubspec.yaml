@@ -33,6 +33,7 @@ dependencies:
   cloud_firestore: ^1.0.6
   firebase_auth: ^1.1.1
   progress_dialog: ^1.2.4
+  syncfusion_flutter_datepicker: ^19.1.58-beta
 
 
 dev_dependencies:
