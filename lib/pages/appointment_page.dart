@@ -21,6 +21,8 @@ class _AppointmentPageState extends State<AppointmentPage> {
   Centre _centre;
   List<Centre> _centres = [];
 
+  TimeOfDay pickedTime = TimeOfDay.now();
+
   @override
   void initState() {
     CenterServices().getAllCenters().then((centres){
@@ -57,6 +59,19 @@ class _AppointmentPageState extends State<AppointmentPage> {
     });
   }
 
+  Future<Null> _selectTime(BuildContext context) async {
+    final TimeOfDay response = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.now(),
+    );
+    if (response != null && response != pickedTime) {
+      setState(() {
+        pickedTime = response;
+        _dateTime = DateTime(_dateTime.year, _dateTime.month, _dateTime.day, pickedTime.hour, pickedTime.minute);
+      });
+    }
+  }
+
   _selectDate(BuildContext context) async {
     final DateTime picked = await showDatePicker(
       context: context,
@@ -89,34 +104,55 @@ class _AppointmentPageState extends State<AppointmentPage> {
           Padding(
             padding: EdgeInsets.all(10),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                DropdownButton<Centre>(
-                  value: _centre,
-                  items: _centres.map((Centre value) {
-                    return new DropdownMenuItem<Centre>(
-                      value: value,
-                      child: new Text(value.name),
-                    );
-                  }).toList(),
-                  onChanged: (v) {
-                    setState(() {
-                      _centre = v;
-                    });
-                  },
+                Padding(
+                  padding: const EdgeInsets.only(left: 20),
+                  child: Expanded(
+                    child: DropdownButtonHideUnderline(
+                      child: DropdownButton<Centre>(
+                        value: _centre,
+                        items: _centres.map((Centre value) {
+                          return new DropdownMenuItem<Centre>(
+                            value: value,
+                            child: new Text(value.name, style: TextStyle(color: Colors.black, fontSize: 20), ),
+                          );
+                        }).toList(),
+                        onChanged: (v) {
+                          setState(() {
+                            _centre = v;
+                          });
+                        },
+                      ),
+                    ),
+                  ),
                 ),
 
 
-                // TextButton.icon(
-                //     label: Text(_dateTime.toString()),
-                //     onPressed: () => _selectDate(context),
-                //     icon: Icon(Icons.calendar_today)),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    TextButton.icon(
+                        label: Text(_dateTime.toString().substring(0, 10)),
+                        onPressed: () => _selectDate(context),
+                        icon: Icon(Icons.calendar_today)),
+                    TextButton.icon(
+                        label: Text(pickedTime.format(context).toString()),
+                        onPressed: () => _selectTime(context),
+                        icon: Icon(Icons.watch)),
+                  ],
+                ),
 
-                ElevatedButton.icon(
-                    icon: Icon(Icons.add),
-                    onPressed: () async {
-                      await _addAppointment();
-                    },
-                    label: Text('Add Appointment'))
+
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton.icon(
+                      icon: Icon(Icons.add),
+                      onPressed: () async {
+                        await _addAppointment();
+                      },
+                      label: Text('Add Appointment')),
+                )
               ],
             ),
           ),
@@ -139,7 +175,7 @@ class _AppointmentPageState extends State<AppointmentPage> {
                      centre.name,
                       style: TextStyle(color: color),
                     ),
-                    subtitle: Text('On ${a.date.toString().substring(0, 10)}, status - ${a.status}', style: TextStyle(color: color),),
+                    subtitle: Text('On ${a.date.toString().substring(0, 16)} [ status - ${a.status} ]', style: TextStyle(color: color),),
                     trailing: IconButton(icon: Icon(Icons.delete, color: Colors.red,), onPressed: () async {
                       await deleteAppointment(a.id);
                     },),
