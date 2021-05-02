@@ -53,11 +53,17 @@ class _AddAdminPageState extends State<AddAdminPage> {
         drawer: mainDrawer(context),
         body: SafeArea(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 10),
+            padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
             child: Form(
               key: _formKey,
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
+                  Text(
+                      'Please ensure the person is already registered as a regular user'),
+                  SizedBox(
+                    height: 5,
+                  ),
                   TextFormField(
                     controller: _emailController,
                     validator: validateEmail,
@@ -72,24 +78,28 @@ class _AddAdminPageState extends State<AddAdminPage> {
                   SizedBox(
                     height: 10,
                   ),
-                  Text(
-                      'Please ensure the person is already registered as a regular user'),
+
                   SizedBox(
                     height: 10,
                   ),
-                  DropdownButton<String>(
-                    value: selectedCentre,
-                    items: _centres.keys.map((String value) {
-                      return new DropdownMenuItem<String>(
-                        value: value,
-                        child: new Text(value),
-                      );
-                    }).toList(),
-                    onChanged: (value) {
-                      setState(() {
-                        selectedCentre = value;
-                      });
-                    },
+                  DropdownButtonHideUnderline(
+                    child: DropdownButton<String>(
+                      value: selectedCentre,
+                      items: _centres.keys.map((String value) {
+                        return new DropdownMenuItem<String>(
+                          value: value,
+                          child: new Text(value, style: TextStyle(fontSize: 18),),
+                        );
+                      }).toList(),
+                      onChanged: (value) {
+                        setState(() {
+                          selectedCentre = value;
+                        });
+                      },
+                    ),
+                  ),
+                  SizedBox(
+                    height: 10,
                   ),
                   ElevatedButton(
                       onPressed: () async {
